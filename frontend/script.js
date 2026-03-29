@@ -37,16 +37,27 @@ sendBtn.onclick = async () => {
     document.getElementById("status").innerText = "Sender...";
 
     try {
-        const response = await fetch("../backend/upload.php", {
+        // ✅ FIX: riktig path (samme server)
+        const response = await fetch("/backend/upload.php", {
             method: "POST",
             body: formData
         });
 
         const data = await response.json();
 
-        document.getElementById("result").innerText = data.text;
+        // 🔥 DEBUG (VIKTIG)
+        console.log("API RESPONSE:", data);
+
+        // ✅ FIX: håndter error
+        if (data.error) {
+            document.getElementById("result").innerText = "Feil: " + data.error;
+        } else {
+            document.getElementById("result").innerText = data.text;
+        }
+
         document.getElementById("status").innerText = "Ferdig!";
     } catch (error) {
+        console.error(error);
         document.getElementById("status").innerText = "Feil: " + error;
     }
 };
