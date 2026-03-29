@@ -49,7 +49,7 @@ curl_setopt_array($curl, [
         "Authorization: Bearer " . $apiKey
     ],
     CURLOPT_POSTFIELDS => [
-        "file" => new CURLFile($filePath),
+        "file" => new CURLFile(realpath($filePath)),
         "model" => "whisper-1",
         "language" => "no"
     ]
