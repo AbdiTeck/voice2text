@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require __DIR__ . '/config.php';
 
 // alltid send JSON
 header('Content-Type: application/json');
