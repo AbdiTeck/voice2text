@@ -49,7 +49,7 @@ curl_setopt_array($curl, [
         "Authorization: Bearer " . $apiKey
     ],
     CURLOPT_POSTFIELDS => [
-        "file" => new CURLFile(realpath($filePath)),
+        "file" => "file" => new CURLFile($filePath, "audio/webm", "audio.webm"),
         "model" => "whisper-1",
         "language" => "no"
     ]
@@ -66,31 +66,22 @@ if (curl_errno($curl)) {
 curl_close($curl);
 
 $result = json_decode($response, true);
-$text = $result["text"] ?? null;
 
-if (!$text) {
+// 🔥 DEBUG: se hele response
+if (!$result || isset($result["error"])) {
     echo json_encode([
-        "error" => "Transcription failed",
-        "response" => $result
+        "error" => $result["error"]["message"] ?? "Unknown API error",
+        "raw" => $response
     ]);
     exit;
 }
 
-// 💾 (VALGFRITT) Database – kun hvis du faktisk bruker det
-/*
-require 'config.php';
+$text = $result["text"] ?? null;
 
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-if (!$conn->connect_error) {
-    $stmt = $conn->prepare("INSERT INTO transcriptions (filename, text, user_id) VALUES (?, ?, ?)");
-    $user_id = 1;
-    $stmt->bind_param("ssi", $fileName, $text, $user_id);
-    $stmt->execute();
+if (!$text) {
+    echo json_encode([
+        "error" => "No text returned",
+        "raw" => $response
+    ]);
+    exit;
 }
-*/
-
-// ✅ Returner resultat
-echo json_encode([
-    "text" => $text
-]);
