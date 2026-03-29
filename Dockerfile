@@ -11,3 +11,4 @@ RUN mkdir -p /var/www/html/backend/uploads && chmod -R 777 /var/www/html/backend
 
 # Aktiver Apache
 RUN a2enmod rewrite
+RUN mkdir -p /var/www/html/uploads && chmod -R 777 /var/www/html/uploads
