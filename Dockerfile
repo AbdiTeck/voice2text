@@ -1,15 +1,14 @@
 FROM php:8.2-apache
 
-# Kopier alt
-COPY . /var/www/html/
+# Installer mysqli (VIKTIG!)
+RUN docker-php-ext-install mysqli
 
-# Flytt frontend til root
-RUN mv /var/www/html/frontend/* /var/www/html/
+WORKDIR /var/www/html
+
+COPY backend/ ./backend/
 
 # Lag uploads mappe
-RUN mkdir -p /var/www/html/backend/uploads && chmod -R 777 /var/www/html/backend/uploads
+RUN mkdir -p backend/uploads \
+    && chmod -R 755 backend/uploads
 
-# Aktiver Apache
-RUN a2enmod rewrite
-RUN mkdir -p /var/www/html/uploads && chmod -R 777 /var/www/html/uploads
-RUN mkdir -p /var/www/html/backend/uploads && chmod -R 777 /var/www/html/backend/uploads
+EXPOSE 80
