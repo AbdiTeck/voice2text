@@ -2,6 +2,8 @@
 require __DIR__ . '/config.php';
 
 // alltid send JSON
+ini_set('display_errors', 0);
+error_reporting(0);
 header('Content-Type: application/json');
 
 // slå på feilrapportering for debug
@@ -10,7 +12,7 @@ ini_set('display_errors', 1);
 
 try {
     // Sjekk DB-tilkobling
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
     if ($conn->connect_error) {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
