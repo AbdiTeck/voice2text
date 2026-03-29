@@ -43,7 +43,11 @@ sendBtn.onclick = async () => {
             body: formData
         });
 
-        const data = await response.json();
+       // const data = await response.json();
+       const text = await response.text();
+console.log("RAW RESPONSE:", text);
+
+const data = JSON.parse(text);
 
         // 🔥 DEBUG (VIKTIG)
         console.log("API RESPONSE:", data);
